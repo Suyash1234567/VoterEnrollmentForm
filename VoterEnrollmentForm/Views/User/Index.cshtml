@@ -1,0 +1,167 @@
+﻿@model VoterEnrollmentForm.Models.States
+@{
+    ViewData["Title"] = "User";
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $('#CityId').html(items);
+            $('#ConstituencyId').html(items);
+            $('#WardNumberId').html(items);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#StateId').change(function () {
+                var url = '@Url.Content("~/")' + "User/GetCity";
+                var ddlsource = "#StateId";
+                $.getJSON(url, { StateId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#CityId").empty();
+                    $.each(data, function (i, city) {
+                        items += "<option value='" + city.value + "'>" + city.text + "</option>";
+                    });
+                    $('#CityId').html(items);
+                });
+            });
+
+            $('#CityId').change(function () {
+                
+                var url = '@Url.Content("~/")' + "User/GetConstituency";
+                var ddlsource = "#CityId";
+                $.getJSON(url, { CityId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#ConstituencyId").empty();
+                    $.each(data, function (i, Constituency) {
+                        items += "<option value='" + Constituency.value + "'>" + Constituency.text + "</option>";
+                    });
+                    $('#ConstituencyId').html(items);
+                });
+            });
+
+            $('#ConstituencyId').change(function () {
+                var url = '@Url.Content("~/")' + "User/GetWard";
+                var ddlsource = "#ConstituencyId";
+                $.getJSON(url, { ConstituencyId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#WardNumberId").empty();
+                    $.each(data, function (i, Ward) {
+                        items += "<option value='" + Ward.value + "'>" + Ward.text + "</option>";
+                    });
+                    $('#WardNumberId').html(items);
+                });
+            });
+
+            $('#Submit1').click(function () {
+                alert('dads');
+                var url = '@Url.Content("~/")' + "User/GetEnrollmentNumber";
+                var ddlsource = "#ConstituencyId";
+                alert($("#EnrollerName").val())
+                $.getJSON(url, { ConstituencyId: $(ddlsource).val(), StateId: $("#StateId").val(), CityId: $("#CityId").val(), WardNumberId: $("#WardNumberId").val(), EnrollerName: $("#EnrollerName").val(), FatherName: $("#FatherName").val(), DOB: $("#DOB").val(), Email: $("#Email").val(), PhoneNumber: $("#PhoneNumber").val() }, function (data) {
+                    var items = '';
+                    $("#WardNumberId").empty();
+                    console.log(data);
+                   
+                });
+
+            });
+
+
+        });
+    </script>
+    <form asp-controller="User" asp-action="Index" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+            <div class="row">
+                <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label asp-for="StateName" class="control-label"> State Name</label>
+                    <select asp-for="StateId" id="StateId" name="StateId"
+                            class="form-control"
+                            asp-items="@(new SelectList(@ViewBag.ListofStates, "StateId", "StateName"))"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">City Name</label>
+                    <select class="form-control" id="CityId" name="CityId" asp-for="CityId"
+                            asp-items="@(new SelectList(string.Empty,"CityId", "CityName"))"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Constituency Name</label>
+                    <select class="form-control" id="ConstituencyId" name="ConstituencyId" asp-for="ConstituencyId"
+                            asp-items="@(new SelectList(string.Empty,"ConstituencyId", "ConstituencyName"))"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Ward Number</label>
+                    <select class="form-control" id="WardNumberId" name="WardNumberId" asp-for="WardNumberId"
+                            asp-items="@(new SelectList(string.Empty,"WardNumberId", "WardNumber"))"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Name</label>
+                    <input id="EnrollerName" asp-for="EnrollerName" />
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Father's Name</label>
+                    <input id="FatherName" asp-for="FatherName" />
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Date of Birth</label>
+                    <input id="DOB" asp-for="DOB" type="date" />
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Email</label>
+                    <input id="Email" asp-for="Email" type="email" />
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label class="control-label">Phone Number</label>
+                    <input id="PhoneNumber" asp-for="PhoneNumber" />
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <input id="Submit1" type="submit" value="submit" />
+                </div>
+            </div>
+        </div>
+        <h1>@ViewBag.EnrollNumber</h1>
+    </form>
+}
+

@@ -1,0 +1,20 @@
+﻿@model VoterEnrollmentForm.Models.States
+@{
+    ViewData["Title"] = "User";
+
+<form asp-controller="Demo" asp-action="Index" method="post" class="form-horizontal" role="form">
+    <div class="form-group">
+        <div class="row">
+            <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label asp-for="StateName" class="control-label"></label>
+                <select asp-for="StateId"
+                        class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.ListofCategory, "StateId", "StateName"))"></select>
+            </div>
+        </div>
+    </div>
+    <h2>User</h2>
+</form>
+    }
+
